@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矯正歯科専門医 研修履歴管理システム</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+         {
+            body { font-size: 12px; }
+            .no-print { display: none; }
+        }
+        .in-period { background-color: #dcfce7; border-color: #16a34a; }
+        .out-period { background-color: #f3f4f6; border-color: #9ca3af; opacity: 0.6; }
+        .achieved { color: #16a34a; font-weight: bold; }
+        .not-achieved { color: #dc2626; font-weight: bold; }
+        .checkbox-cell { width: 60px; text-align: center; }
+        .field-name { width: 200px; }
+    </style>
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold text-center text-blue-800 mb-8">
+            <i class="fas fa-tooth mr-3"></i>矯正歯科専門医 研修履歴管理システム
+        </h1>
+
+        <!-- 基本情報入力 -->
+        <div class="bg-blue-50 p-6 rounded-lg mb-6">
+            <h2 class="text-xl font-bold text-blue-800 mb-4">
+                <i class="fas fa-info-circle mr-2"></i>基本情報
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">申請タイプ</label>
+                    <select id="applicationType" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <option value="">選択してください</option>
+                        <option value="new">新規申請</option>
+                        <option value="renewal">更新申請</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">申請年度</label>
+                    <select id="applicationYear" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <option value="">選択してください</option>
+                        <option value="2026">2026年度</option>
+                        <option value="2027">2027年度</option>
+                        <option value="2028">2028年度</option>
+                        <option value="2029">2029年度</option>
+                        <option value="2030">2030年度</option>
+                        <option value="2031">2031年度</option>
+                        <option value="2032">2032年度</option>
+                        <option value="2033">2033年度</option>
+                        <option value="2034">2034年度</option>
+                        <option value="2035">2035年度</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 申請要件表示 -->
+        <div id="requirementsSection" class="bg-green-50 p-6 rounded-lg mb-6 hidden">
+            <h2 class="text-xl font-bold text-green-800 mb-4">
+                <i class="fas fa-clipboard-list mr-2"></i>申請要件
+            </h2>
+            <div id="requirementsContent"></div>
+        </div>
+
+        <!-- 研修履歴入力 -->
+        <div id="trainingSection" class="bg-gray-50 p-6 rounded-lg mb-6 hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-table mr-2"></i>研修履歴入力
+            </h2>
+            <div class="overflow-x-auto">
+                <table id="trainingMatrix" class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 p-2 field-name">研修分野</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2020</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2021</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2022</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2023</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2024</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2025</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2026</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2027</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2028</th>
+                            <th class="border border-gray-300 p-2 checkbox-cell">2029</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 p-2 font-medium">①医療倫理</td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2020" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2021" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2022" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2023" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2024" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2025" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2026" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2027" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2028" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="ethics" data-year="2029" class="training-checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2 font-medium">②患者・医療者関係の構築</td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2020" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2021" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2022" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2023" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2024" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2025" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2026" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2027" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2028" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="relationship" data-year="2029" class="training-checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2 font-medium">③医療安全</td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2020" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2021" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2022" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2023" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2024" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2025" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2026" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2027" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2028" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="safety" data-year="2029" class="training-checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2 font-medium">④院内感染対策</td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2020" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2021" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2022" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2023" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2024" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2025" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2026" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2027" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2028" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="infection" data-year="2029" class="training-checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2 font-medium">⑤医療関連法規・医療経済</td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2020" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2021" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2022" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2023" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2024" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2025" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2026" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2027" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2028" class="training-checkbox"></td>
+                            <td class="border border-gray-300 p-2 text-center"><input type="checkbox" data-field="law" data-year="2029" class="training-checkbox"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- その他研修追加 -->
+        <div id="manualInputSection" class="bg-yellow-50 p-6 rounded-lg mb-6 hidden">
+            <h3 class="text-lg font-bold text-yellow-800 mb-4">
+                <i class="fas fa-plus-circle mr-2"></i>その他研修追加
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">取得年度</label>
+                    <input type="number" id="manualYear" min="2020" max="2035" class="w-full p-2 border border-gray-300 rounded-md" placeholder="例: 2025">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">研修分野</label>
+                    <select id="manualField" class="w-full p-2 border border-gray-300 rounded-md">
+                        <option value="">選択してください</option>
+                        <option value="ethics">医療倫理</option>
+                        <option value="relationship">患者・医療者関係の構築</option>
+                        <option value="safety">医療安全</option>
+                        <option value="infection">院内感染対策</option>
+                        <option value="law">医療関連法規・医療経済</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button id="addManualTraining" class="w-full bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700">
+                        <i class="fas fa-plus mr-2"></i>追加
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 進捗状況 -->
+        <div id="progressSection" class="bg-purple-50 p-6 rounded-lg mb-6 hidden">
+            <h2 class="text-xl font-bold text-purple-800 mb-4">
+                <i class="fas fa-chart-bar mr-2"></i>進捗状況
+            </h2>
+            <div id="progressContent"></div>
+        </div>
+
+        <!-- 申請可能性判定 -->
+        <div id="judgmentSection" class="p-6 rounded-lg mb-6 hidden">
+            <h2 class="text-xl font-bold mb-4">
+                <i class="fas fa-clipboard-check mr-2"></i>申請可能性判定
+            </h2>
+            <div id="judgmentContent"></div>
+        </div>
+
+        <!-- データ管理 -->
+        <div class="bg-gray-100 p-6 rounded-lg no-print">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-database mr-2"></i>データ管理
+            </h2>
+            <div class="flex gap-4">
+                <button id="saveData" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    <i class="fas fa-save mr-2"></i>データ保存
+                </button>
+                <button id="loadData" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    <i class="fas fa-upload mr-2"></i>データ読み込み
+                </button>
+                <input type="file" id="fileInput" accept=".json" class="hidden">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = {
+            applicationType: '',
+            applicationYear: '',
+            trainingRecords: {},
+            targetPeriod: null,
+            requirements: null
+        };
+
+        // 基本情報変更時の処理
+        function setupBasicInfoHandlers() {
+            document.getElementById('applicationType').addEventListener('change', updateRequirements);
+            document.getElementById('applicationYear').addEventListener('change', updateRequirements);
+        }
+
+        // 申請要件の更新
+        function updateRequirements() {
+            const applicationType = document.getElementById('applicationType').value;
+            const applicationYear = parseInt(document.getElementById('applicationYear').value);
+
+            if (!applicationType || !applicationYear) {
+                document.getElementById('requirementsSection').classList.add('hidden');
+                document.getElementById('trainingSection').classList.add('hidden');
+                document.getElementById('manualInputSection').classList.add('hidden');
+                document.getElementById('progressSection').classList.add('hidden');
+                document.getElementById('judgmentSection').classList.add('hidden');
+                return;
+            }
+
+            currentData.applicationType = applicationType;
+            currentData.applicationYear = applicationYear;
+
+            // 対象期間の計算
+            let targetPeriod;
+            if (applicationYear >= 2028) {
+                // 2028年以降：申請年度の前年度までの過去5年
+                const endYear = applicationYear - 1;
+                const startYear = endYear - 4;
+                targetPeriod = { start: startYear, end: endYear };
+            } else {
+                // 2027年まで：従来の計算方法
+                if (applicationYear === 2026) {
+                    targetPeriod = { start: 2021, end: 2025 };
+                } else if (applicationYear === 2027) {
+                    targetPeriod = { start: 2022, end: 2026 };
+                }
+            }
+
+            currentData.targetPeriod = targetPeriod;
+
+            // 必要単位数の設定
+            let requirements;
+            if (applicationYear === 2025) {
+                requirements = { total: 6, fieldRequired: false };
+            } else if (applicationYear === 2026) {
+                requirements = { total: 8, fieldRequired: false };
+            } else {
+                requirements = { total: 10, fieldRequired: true };
+            }
+
+            currentData.requirements = requirements;
+
+            // 要件表示
+            displayRequirements(targetPeriod, requirements, applicationYear);
+            
+            // セクション表示
+            document.getElementById('requirementsSection').classList.remove('hidden');
+            document.getElementById('trainingSection').classList.remove('hidden');
+            document.getElementById('manualInputSection').classList.remove('hidden');
+            document.getElementById('progressSection').classList.remove('hidden');
+            document.getElementById('judgmentSection').classList.remove('hidden');
+
+            // チェックボックスの期間表示更新
+            updateCheckboxPeriodDisplay();
+            
+            // 進捗更新
+            updateProgress();
+        }
+
+        // 要件表示
+        function displayRequirements(targetPeriod, requirements, applicationYear) {
+            let html = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-700">対象期間</h4>
+                        <p class="text-lg">${targetPeriod.start}年～${targetPeriod.end}年（5年間）</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-700">必要単位数</h4>
+                        <p class="text-lg">${requirements.total}単位以上</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-700">分野別要件</h4>
+                        <p class="text-lg">${requirements.fieldRequired ? '各分野1単位以上' : 'なし'}</p>
+                    </div>
+                </div>
+            `;
+
+            if (requirements.fieldRequired) {
+                html += `
+                    <div class="mt-4 bg-white p-4 rounded-lg">
+                        <h4 class="font-bold text-gray-800 mb-2">各分野の最低必要単位数</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                            <div>①医療倫理：1単位以上</div>
+                            <div>②患者・医療者関係の構築：1単位以上</div>
+                            <div>③医療安全：1単位以上</div>
+                            <div>④院内感染対策：1単位以上</div>
+                            <div>⑤医療関連法規・医療経済：1単位以上</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('requirementsContent').innerHTML = html;
+        }
+
+        // チェックボックスの期間表示更新
+        function updateCheckboxPeriodDisplay() {
+            if (!currentData.targetPeriod) return;
+
+            const { start, end } = currentData.targetPeriod;
+            const checkboxes = document.querySelectorAll('.training-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                const year = parseInt(checkbox.dataset.year);
+                const cell = checkbox.parentElement;
+                
+                if (year >= start && year <= end) {
+                    cell.classList.add('in-period');
+                    cell.classList.remove('out-period');
+                } else {
+                    cell.classList.add('out-period');
+                    cell.classList.remove('in-period');
+                }
+            });
+        }
+
+        // チェックボックス変更時の処理
+        function setupTrainingHandlers() {
+            document.querySelectorAll('.training-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const field = e.target.dataset.field;
+                    const year = parseInt(e.target.dataset.year);
+                    
+                    if (!currentData.trainingRecords[field]) {
+                        currentData.trainingRecords[field] = [];
+                    }
+                    
+                    if (e.target.checked) {
+                        if (!currentData.trainingRecords[field].includes(year)) {
+                            currentData.trainingRecords[field].push(year);
+                        }
+                    } else {
+                        currentData.trainingRecords[field] = currentData.trainingRecords[field].filter(y => y !== year);
+                    }
+                    
+                    updateProgress();
+                });
+            });
+        }
+
+        // 手動入力の処理
+        function setupManualInput() {
+            document.getElementById('addManualTraining').addEventListener('click', () => {
+                const year = parseInt(document.getElementById('manualYear').value);
+                const field = document.getElementById('manualField').value;
+                
+                if (!year || !field) {
+                    alert('年度と分野を選択してください');
+                    return;
+                }
+                
+                if (!currentData.trainingRecords[field]) {
+                    currentData.trainingRecords[field] = [];
+                }
+                
+                if (!currentData.trainingRecords[field].includes(year)) {
+                    currentData.trainingRecords[field].push(year);
+                    updateProgress();
+                    
+                    // 対応するチェックボックスがある場合はチェック
+                    const checkbox = document.querySelector(`[data-field="${field}"][data-year="${year}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                }
+                
+                // 入力フィールドをクリア
+                document.getElementById('manualYear').value = '';
+                document.getElementById('manualField').value = '';
+            });
+        }
+
+        // 進捗更新
+        function updateProgress() {
+            if (!currentData.targetPeriod || !currentData.requirements) return;
+
+            const { start, end } = currentData.targetPeriod;
+            const fields = ['ethics', 'relationship', 'safety', 'infection', 'law'];
+            const fieldNames = {
+                ethics: '①医療倫理',
+                relationship: '②患者・医療者関係の構築',
+                safety: '③医療安全',
+                infection: '④院内感染対策',
+                law: '⑤医療関連法規・医療経済'
+            };
+
+            let totalUnits = 0;
+            let fieldUnits = {};
+
+            // 期間内の単位数を計算
+            fields.forEach(field => {
+                const years = currentData.trainingRecords[field] || [];
+                const validYears = years.filter(year => year >= start && year <= end);
+                fieldUnits[field] = validYears.length;
+                totalUnits += validYears.length;
+            });
+
+            // 進捗表示
+            let html = `
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-4">取得単位数（期間内のみ）</h3>
+                    <div class="bg-white p-4 rounded-lg border-2 ${totalUnits >= currentData.requirements.total ? 'border-green-500' : 'border-red-500'}">
+                        <div class="text-center">
+                            <span class="text-3xl font-bold ${totalUnits >= currentData.requirements.total ? 'text-green-600' : 'text-red-600'}">${totalUnits}</span>
+                            <span class="text-lg text-gray-600"> / ${currentData.requirements.total}単位</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            `;
+
+            fields.forEach(field => {
+                const units = fieldUnits[field];
+                const required = currentData.requirements.fieldRequired ? 1 : 0;
+                const isAchieved = units >= required;
+                
+                html += `
+                    <div class="bg-white p-4 rounded-lg border-l-4 ${isAchieved ? 'border-green-500' : 'border-red-500'}">
+                        <h4 class="font-medium text-gray-800">${fieldNames[field]}</h4>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-2xl font-bold ${isAchieved ? 'text-green-600' : 'text-red-600'}">${units}単位</span>
+                            ${currentData.requirements.fieldRequired ? 
+                                `<span class="text-sm ${isAchieved ? 'text-green-600' : 'text-red-600'}">${isAchieved ? '達成' : '未達成'}</span>` : 
+                                '<span class="text-sm text-gray-500">制限なし</span>'
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            document.getElementById('progressContent').innerHTML = html;
+
+            // 申請可能性判定
+            updateJudgment(totalUnits, fieldUnits);
+        }
+
+        // 申請可能性判定
+        function updateJudgment(totalUnits, fieldUnits) {
+            const { total, fieldRequired } = currentData.requirements;
+            
+            let isEligible = totalUnits >= total;
+            let issues = [];
+
+            if (totalUnits < total) {
+                issues.push(`総単位数が不足しています（${totalUnits}/${total}単位）`);
+            }
+
+            if (fieldRequired) {
+                const fields = ['ethics', 'relationship', 'safety', 'infection', 'law'];
+                const fieldNames = {
+                    ethics: '医療倫理',
+                    relationship: '患者・医療者関係の構築',
+                    safety: '医療安全',
+                    infection: '院内感染対策',
+                    law: '医療関連法規・医療経済'
+                };
+
+                fields.forEach(field => {
+                    if (fieldUnits[field] < 1) {
+                        isEligible = false;
+                        issues.push(`${fieldNames[field]}の単位が不足しています（${fieldUnits[field]}/1単位）`);
+                    }
+                });
+            }
+
+            let html;
+            if (isEligible) {
+                html = `
+                    <div class="bg-green-100 border-l-4 border-green-500 p-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 text-2xl mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-bold text-green-800">申請可能</h3>
+                                <p class="text-green-700">すべての要件を満たしています。</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('judgmentSection').className = 'bg-green-50 p-6 rounded-lg mb-6';
+            } else {
+                html = `
+                    <div class="bg-red-100 border-l-4 border-red-500 p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-times-circle text-red-500 text-2xl mr-3"></i>
+                            <div>
+                                <h3 class="text-lg font-bold text-red-800">申請不可</h3>
+                                <p class="text-red-700">以下の要件を満たしていません：</p>
+                            </div>
+                        </div>
+                        <ul class="list-disc list-inside text-red-700 space-y-1">
+                            ${issues.map(issue => `<li>${issue}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                document.getElementById('judgmentSection').className = 'bg-red-50 p-6 rounded-lg mb-6';
+            }
+
+            document.getElementById('judgmentContent').innerHTML = html;
+        }
+
+        // データ保存・読み込み
+        function setupDataManagement() {
+            document.getElementById('saveData').addEventListener('click', () => {
+                const dataStr = JSON.stringify(currentData, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `orthodontic_training_data_${new Date().toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            document.getElementById('loadData').addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        loadData(data);
+                    } catch (error) {
+                        alert('ファイルの読み込みに失敗しました');
+                    }
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // データ読み込み
+        function loadData(data) {
+            currentData = data;
+            
+            // UI更新
+            document.getElementById('applicationType').value = data.applicationType || '';
+            document.getElementById('applicationYear').value = data.applicationYear || '';
+            
+            // チェックボックス更新
+            document.querySelectorAll('.training-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            Object.keys(data.trainingRecords || {}).forEach(field => {
+                const years = data.trainingRecords[field] || [];
+                years.forEach(year => {
+                    const checkbox = document.querySelector(`[data-field="${field}"][data-year="${year}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            });
+            
+            updateRequirements();
+        }
+
+        // 初期化
+        function init() {
+            setupBasicInfoHandlers();
+            setupTrainingHandlers();
+            setupManualInput();
+            setupDataManagement();
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDgw8gEshzV%2BxawMzMF1mR9vvUFZnFeJ36b8juMHR%2FbKHr9lrDtykFO3adc5p8Fl%2FGKGmnypfC10W6HRM85qS%2F1rGZB%2BPMjBerbI8Jf5QKCXpAQnE%2Fb6vzPM8ykMfylO3KGxkJMC%2F%2FbYtArXFVxTnLWcCxuYmE%2B16NkQTNlDZ2Pw5AStH%2Fz7UoskVac3mizjvyXFO9zQVXQoH8Ymsslpmvbr9mcsnNeSyyr03%2FPUaMRiWBzm9sDiycToKb61ha96V2lFdvv8XKcLSCA0zeXwFvaIqXeVfY6%2B5hFBjMtkiq2wTQ5qpQc6EsrMmz4t6CRfTQ7DxZ2DZ2mOyejxtk4epSEGQQMHkpTyFvAZJ0nJYc83YDmtu%2B%2BlQN78z%2BhVU52mQP5RQqLFrOZTgfq1in%2FlMOll0VmEdx08ZqID959Q6OHRLjw2NZa7ysfj3Z1uzeQVKdzoou0CVcA%2Fq2K0m5L8G1oX6Hw3x05%2FsPg02Mz4baU3N6HBPryauVz12Qj0TcXusMmF0p67%2FsefkaSePR5o29wU%3D";
+        window.__genspark_locale = "ja-JP";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDgw8gEshzV+xawMzMF1mR9vvUFZnFeJ36b8juMHR/bKHr9lrDtykFO3adc5p8Fl/GKGmnypfC10W6HRM85qS/1rGZB+PMjBerbI8Jf5QKCXpAQnE/b6vzPM8ykMfylO3KGxkJMC//bYtArXFVxTnLWcCxuYmE+16NkQTNlDZ2Pw5AStH/z7UoskVac3mizjvyXFO9zQVXQoH8Ymsslpmvbr9mcsnNeSyyr03/PUaMRiWBzm9sDiycToKb61ha96V2lFdvv8XKcLSCA0zeXwFvaIqXeVfY6+5hFBjMtkiq2wTQ5qpQc6EsrMmz4t6CRfTQ7DxZ2DZ2mOyejxtk4epSEGQQMHkpTyFvAZJ0nJYc83YDmtu++lQN78z+hVU52mQP5RQqLFrOZTgfq1in/lMOll0VmEdx08ZqID959Q6OHRLjw2NZa7ysfj3Z1uzeQVKdzoou0CVcA/q2K0m5L8G1oX6Hw3x05/sPg02Mz4baU3N6HBPryauVz12Qj0TcXusMmF0p67/sefkaSePR5o29wU=";
+    </script>
+    
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
