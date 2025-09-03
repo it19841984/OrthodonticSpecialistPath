@@ -12,107 +12,86 @@
         
         body {
             font-family: 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif;
-            line-height: 1.6;
         }
         
-        .matrix-table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 20px 0;
+        .training-table {
+            overflow-x: auto;
         }
         
-        .matrix-table th,
-        .matrix-table td {
-            border: 1px solid #e2e8f0;
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        
-        .matrix-table th {
-            background-color: #f8fafc;
-            font-weight: 600;
-        }
-        
-        .matrix-table td:first-child {
-            text-align: left;
-            font-size: 0.875rem;
-            background-color: #f8fafc;
+        .training-table table {
+            min-width: 800px;
         }
         
         .period-valid {
-            background-color: #f0fff4;
+            background-color: #dcfce7;
+            border-color: #16a34a;
         }
         
         .period-invalid {
-            background-color: #fafafa;
-            color: #9ca3af;
-        }
-        
-        .progress-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 2px solid #e5e7eb;
-        }
-        
-        .progress-achieved {
-            border-color: #10b981;
-            background-color: #f0fdf4;
-        }
-        
-        .progress-incomplete {
-            border-color: #ef4444;
             background-color: #fef2f2;
+            border-color: #dc2626;
         }
         
-        .special-checkbox {
-            background-color: #fff7ed;
-            border: 2px solid #f59e0b;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 20px 0;
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .field-progress {
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            border-radius: 0.375rem;
+        }
+        
+        .field-achieved {
+            background-color: #dcfce7;
+            border-left: 4px solid #16a34a;
+        }
+        
+        .field-insufficient {
+            background-color: #fef2f2;
+            border-left: 4px solid #dc2626;
         }
         
          {
+            .no-print {
+                display: none !important;
+            }
+            
             body {
                 font-size: 12px;
+                line-height: 1.4;
             }
-            .no-print {
-                display: none;
-            }
-            .matrix-table {
-                font-size: 11px;
-            }
-            .matrix-table th,
-            .matrix-table td {
-                padding: 4px;
+            
+            .container {
+                max-width: none;
+                padding: 0;
             }
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                <i class="fas fa-tooth text-blue-600 mr-3"></i>
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-tooth text-blue-600 mr-2"></i>
                 矯正歯科専門医 研修履歴管理システム
             </h1>
-            <p class="text-gray-600">日本歯科専門医機構認定 矯正歯科専門医の申請・更新管理</p>
-        </header>
+            <p class="text-gray-600">新規申請・更新申請に必要な共通研修単位の進捗を管理</p>
+        </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+        <!-- Application Type and Year Selection -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">
                 <i class="fas fa-cog text-blue-600 mr-2"></i>基本設定
             </h2>
             
-            <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">申請タイプ</label>
-                    <select id="applicationType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <select id="applicationType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">選択してください</option>
                         <option value="new">新規申請</option>
                         <option value="renewal">更新申請</option>
@@ -121,506 +100,563 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">申請年度</label>
-                    <select id="applicationYear" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">申請タイプを選択してください</option>
+                    <select id="applicationYear" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">申請タイプを先に選択してください</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div id="requirementsInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6" style="display: none;">
-            <h3 class="text-lg font-semibold text-blue-800 mb-3">
-                <i class="fas fa-info-circle mr-2"></i>申請要件
-            </h3>
-            <div id="requirementsContent"></div>
-        </div>
-
-        <div id="trainingHistorySection" class="bg-white rounded-lg shadow-lg p-6 mb-6" style="display: none;">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">
-                <i class="fas fa-table text-green-600 mr-2"></i>研修履歴入力
+        <!-- Application Requirements -->
+        <div id="requirementsSection" class="bg-white rounded-lg shadow-md p-6 mb-6" style="display: none;">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">
+                <i class="fas fa-clipboard-list text-green-600 mr-2"></i>申請要件
             </h2>
             
-            <div class="overflow-x-auto">
-                <table id="trainingMatrix" class="matrix-table">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-medium text-blue-800 mb-2">対象期間</h3>
+                    <p id="targetPeriod" class="text-blue-700"></p>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-medium text-green-800 mb-2">必要単位数</h3>
+                    <p id="requiredUnits" class="text-green-700"></p>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="font-medium text-purple-800 mb-2">分野別要件</h3>
+                    <p id="fieldRequirements" class="text-purple-700"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training History Input -->
+        <div id="trainingSection" class="bg-white rounded-lg shadow-md p-6 mb-6" style="display: none;">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">
+                <i class="fas fa-table text-orange-600 mr-2"></i>研修履歴入力
+            </h2>
+            
+            <div class="training-table overflow-x-auto">
+                <table id="trainingTable" class="w-full border-collapse">
                     <thead>
                         <tr>
-                            <th>研修分野</th>
-                            <!-- 年度のヘッダーは動的に生成 -->
+                            <th class="border border-gray-300 bg-gray-100 px-4 py-2 text-left">研修分野</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>①医療倫理</td>
-                            <!-- チェックボックスは動的に生成 -->
+                            <td class="border border-gray-300 px-4 py-2">①医療倫理</td>
                         </tr>
                         <tr>
-                            <td>②患者・医療者関係の構築</td>
+                            <td class="border border-gray-300 px-4 py-2">②患者・医療者関係の構築</td>
                         </tr>
                         <tr>
-                            <td>③医療安全</td>
+                            <td class="border border-gray-300 px-4 py-2">③医療安全</td>
                         </tr>
                         <tr>
-                            <td>④院内感染対策</td>
+                            <td class="border border-gray-300 px-4 py-2">④院内感染対策</td>
                         </tr>
                         <tr>
-                            <td>⑤医療関連法規・医療経済</td>
+                            <td class="border border-gray-300 px-4 py-2">⑤医療関連法規・医療経済</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div id="specialRequirement2029" class="special-checkbox" style="display: none;">
-                <label class="flex items-start space-x-3">
-                    <input type="checkbox" id="specialCheckbox2029" class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <span class="text-sm text-gray-800">
+            <!-- 2029年度以降の特別要件チェックボックス -->
+            <div id="specialRequirement2029" class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg" style="display: none;">
+                <label class="flex items-start">
+                    <input type="checkbox" id="mechanismTrainingCheck" class="mt-1 mr-3">
+                    <span class="text-sm text-gray-700">
                         共通研修区分「①医療倫理」「②患者・医療者関係の構築」「⑤医療関連法規・医療経済」について、それぞれ1単位（合計3単位）の日本歯科専門医機構主催研修の受講している。
                     </span>
                 </label>
             </div>
 
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold mb-3 text-gray-800">その他研修追加</h3>
-                <div class="grid md:grid-cols-3 gap-4 mb-4">
+            <!-- Manual Training Entry -->
+            <div class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                <h3 class="font-medium text-gray-800 mb-3">その他研修追加</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">取得年度</label>
-                        <input type="number" id="manualYear" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500" placeholder="2023" min="2020" max="2035">
+                        <select id="manualYear" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                            <option value="">選択</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">研修分野</label>
-                        <select id="manualField" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                            <option value="">選択してください</option>
-                            <option value="ethics">①医療倫理</option>
-                            <option value="relations">②患者・医療者関係の構築</option>
-                            <option value="safety">③医療安全</option>
-                            <option value="infection">④院内感染対策</option>
-                            <option value="regulations">⑤医療関連法規・医療経済</option>
+                        <select id="manualField" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                            <option value="">選択</option>
+                            <option value="0">①医療倫理</option>
+                            <option value="1">②患者・医療者関係の構築</option>
+                            <option value="2">③医療安全</option>
+                            <option value="3">④院内感染対策</option>
+                            <option value="4">⑤医療関連法規・医療経済</option>
                         </select>
                     </div>
-                    <div class="flex items-end">
-                        <button id="addManualTraining" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
-                            <i class="fas fa-plus mr-2"></i>追加
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">　</label>
+                        <button id="addManualTraining" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+                            追加
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="progressSection" class="bg-white rounded-lg shadow-lg p-6 mb-6" style="display: none;">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">
-                <i class="fas fa-chart-line text-purple-600 mr-2"></i>進捗状況
+        <!-- Progress Status -->
+        <div id="progressSection" class="bg-white rounded-lg shadow-md p-6 mb-6" style="display: none;">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">
+                <i class="fas fa-chart-bar text-indigo-600 mr-2"></i>進捗状況
             </h2>
             
-            <div id="progressContent">
-                <!-- 進捗内容は動的に生成 -->
-            </div>
-            
-            <div id="eligibilityResult" class="mt-6 p-4 rounded-lg">
-                <!-- 判定結果は動的に生成 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Field Progress -->
+                <div>
+                    <h3 class="font-medium text-gray-800 mb-3">分野別進捗状況</h3>
+                    <div id="fieldProgress"></div>
+                    
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-medium text-gray-800 mb-2">総合状況</h4>
+                        <div id="totalProgress" class="space-y-2"></div>
+                    </div>
+                </div>
+                
+                <!-- Training History List -->
+                <div>
+                    <h3 class="font-medium text-gray-800 mb-3">取得履歴</h3>
+                    <div id="trainingHistory" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                </div>
             </div>
         </div>
 
-        <div class="text-center no-print">
-            <button id="saveButton" class="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold">
-                <i class="fas fa-print mr-2"></i>保存（印刷）
-            </button>
+        <!-- Actions -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button id="saveButton" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center">
+                    <i class="fas fa-print mr-2"></i>保存（印刷）
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // グローバル変数
+        // Global variables
         let trainingData = {};
-        let manualTrainingData = [];
-        let currentApplicationType = '';
-        let currentApplicationYear = '';
+        let applicationConfig = {};
+        const fieldNames = [
+            '①医療倫理',
+            '②患者・医療者関係の構築',
+            '③医療安全',
+            '④院内感染対策',
+            '⑤医療関連法規・医療経済'
+        ];
 
-        // 研修分野マッピング
-        const fieldMapping = {
-            'ethics': '①医療倫理',
-            'relations': '②患者・医療者関係の構築',
-            'safety': '③医療安全',
-            'infection': '④院内感染対策',
-            'regulations': '⑤医療関連法規・医療経済'
-        };
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadFromLocalStorage();
+        });
 
-        // 申請タイプ変更時の処理
-        document.getElementById('applicationType').addEventListener('change', function() {
-            const applicationType = this.value;
+        function setupEventListeners() {
+            document.getElementById('applicationType').addEventListener('change', handleApplicationTypeChange);
+            document.getElementById('applicationYear').addEventListener('change', handleApplicationYearChange);
+            document.getElementById('addManualTraining').addEventListener('click', addManualTraining);
+            document.getElementById('mechanismTrainingCheck').addEventListener('change', updateProgress);
+            document.getElementById('saveButton').addEventListener('click', handleSave);
+        }
+
+        function handleApplicationTypeChange() {
+            const applicationType = document.getElementById('applicationType').value;
             const yearSelect = document.getElementById('applicationYear');
             
-            // 年度選択肢をクリア
             yearSelect.innerHTML = '<option value="">選択してください</option>';
             
             if (applicationType === 'new') {
-                // 新規申請の年度選択肢
                 for (let year = 2026; year <= 2035; year++) {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = year + '年';
-                    yearSelect.appendChild(option);
+                    yearSelect.innerHTML += `<option value="${year}">${year}年</option>`;
                 }
             } else if (applicationType === 'renewal') {
-                // 更新申請の年度選択肢（専門医期限付き）
                 for (let year = 2027; year <= 2035; year++) {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = `${year}年度申請（専門医期限${year + 1}年3月31日）`;
-                    yearSelect.appendChild(option);
+                    const deadline = year + 1;
+                    yearSelect.innerHTML += `<option value="${year}">${year}年度申請（専門医期限${deadline}年3月31日）</option>`;
                 }
             }
             
-            // UI初期化
-            resetUI();
-        });
+            document.getElementById('applicationYear').value = '';
+            hideAllSections();
+        }
 
-        // 申請年度変更時の処理
-        document.getElementById('applicationYear').addEventListener('change', function() {
+        function handleApplicationYearChange() {
             const applicationType = document.getElementById('applicationType').value;
-            const applicationYear = parseInt(this.value);
+            const applicationYear = parseInt(document.getElementById('applicationYear').value);
             
-            if (applicationType && applicationYear) {
-                currentApplicationType = applicationType;
-                currentApplicationYear = applicationYear;
-                
-                showRequirements(applicationType, applicationYear);
-                setupTrainingMatrix(applicationYear);
-                setupSpecialRequirement(applicationYear);
-                updateProgress();
+            if (!applicationType || !applicationYear) {
+                hideAllSections();
+                return;
             }
-        });
+            
+            applicationConfig = calculateRequirements(applicationType, applicationYear);
+            displayRequirements();
+            setupTrainingTable();
+            showAllSections();
+            updateProgress();
+        }
 
-        // 要件表示
-        function showRequirements(applicationType, applicationYear) {
-            const requirementsInfo = document.getElementById('requirementsInfo');
-            const requirementsContent = document.getElementById('requirementsContent');
+        function calculateRequirements(type, year) {
+            let config = {
+                type: type,
+                year: year,
+                targetPeriod: '',
+                requiredUnits: 0,
+                fieldRequirements: '',
+                requiresFieldMinimum: false,
+                targetYears: []
+            };
             
-            let targetPeriod = '';
-            let requiredUnits = '';
-            let fieldRequirements = '';
-            
-            if (applicationType === 'new') {
-                // 新規申請の対象期間計算
-                if (applicationYear <= 2027) {
-                    // 2027年まで従来の計算方法
-                    const startYear = 2022;
-                    const endYear = applicationYear - 1;
-                    targetPeriod = `${startYear}年～${endYear}年`;
-                } else {
-                    // 2028年以降は申請前年度までの過去5年
-                    const endYear = applicationYear - 1;
-                    const startYear = endYear - 4;
-                    targetPeriod = `${startYear}年～${endYear}年`;
+            if (type === 'new') {
+                // New application logic
+                if (year === 2026) {
+                    config.requiredUnits = 8;
+                    config.fieldRequirements = '分野別の最低単位数制限なし';
+                    config.requiresFieldMinimum = false;
+                } else if (year >= 2027) {
+                    config.requiredUnits = 10;
+                    config.fieldRequirements = '各分野から1単位以上必須';
+                    config.requiresFieldMinimum = true;
                 }
                 
-                // 新規申請の必要単位数
-                if (applicationYear === 2026) {
-                    requiredUnits = '8単位';
-                    fieldRequirements = '分野別の最低単位数制限なし';
-                } else if (applicationYear >= 2027) {
-                    requiredUnits = '10単位以上';
-                    fieldRequirements = '各分野から1単位以上必須';
+                // Target period calculation for new applications
+                if (year <= 2027) {
+                    // Original logic for 2027 and before
+                    const baseYear = 2022;
+                    const endYear = year - 1; // Previous year of application
+                    config.targetPeriod = `${baseYear}年〜${endYear}年`;
+                    config.targetYears = [];
+                    for (let y = baseYear; y <= endYear; y++) {
+                        config.targetYears.push(y);
+                    }
+                } else {
+                    // 2028 and after: 5 years before application year
+                    const endYear = year - 1;
+                    const startYear = endYear - 4;
+                    config.targetPeriod = `${startYear}年〜${endYear}年`;
+                    config.targetYears = [];
+                    for (let y = startYear; y <= endYear; y++) {
+                        config.targetYears.push(y);
+                    }
                 }
-            } else if (applicationType === 'renewal') {
-                // 更新申請の対象期間（申請前年度から過去5年）
-                const endYear = applicationYear - 1;
+            } else if (type === 'renewal') {
+                // Renewal application logic
+                config.requiredUnits = 10;
+                config.fieldRequirements = '各分野から1単位以上必須'; // Fixed requirement
+                config.requiresFieldMinimum = true;
+                
+                // Target period: 5 years before application year
+                const endYear = year - 1;
                 const startYear = endYear - 4;
-                targetPeriod = `${startYear}年～${endYear}年`;
-                requiredUnits = '10単位';
-                fieldRequirements = '分野別の最低単位数制限なし';
+                config.targetPeriod = `${startYear}年〜${endYear}年`;
+                config.targetYears = [];
+                for (let y = startYear; y <= endYear; y++) {
+                    config.targetYears.push(y);
+                }
             }
             
-            requirementsContent.innerHTML = `
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div>
-                        <div class="text-sm text-blue-700 font-medium">対象期間</div>
-                        <div class="text-lg font-semibold">${targetPeriod}</div>
+            return config;
+        }
+
+        function displayRequirements() {
+            document.getElementById('targetPeriod').textContent = applicationConfig.targetPeriod;
+            document.getElementById('requiredUnits').textContent = `${applicationConfig.requiredUnits}単位`;
+            document.getElementById('fieldRequirements').textContent = applicationConfig.fieldRequirements;
+        }
+
+        function setupTrainingTable() {
+            const table = document.getElementById('trainingTable');
+            const thead = table.querySelector('thead tr');
+            const tbody = table.querySelector('tbody');
+            
+            // Clear existing year columns
+            while (thead.children.length > 1) {
+                thead.removeChild(thead.lastChild);
+            }
+            
+            // Setup years for display (application year + 6 previous years = 7 years total)
+            const displayYears = [];
+            const applicationYear = applicationConfig.year;
+            for (let i = 6; i >= 0; i--) {
+                displayYears.push(applicationYear - i);
+            }
+            
+            // Add year headers
+            displayYears.forEach(year => {
+                const th = document.createElement('th');
+                th.className = 'border border-gray-300 bg-gray-100 px-2 py-2 text-center text-sm';
+                th.textContent = `${year}年`;
+                thead.appendChild(th);
+            });
+            
+            // Setup table body
+            tbody.innerHTML = '';
+            fieldNames.forEach((fieldName, fieldIndex) => {
+                const tr = document.createElement('tr');
+                
+                const fieldTd = document.createElement('td');
+                fieldTd.className = 'border border-gray-300 px-4 py-2 font-medium';
+                fieldTd.textContent = fieldName;
+                tr.appendChild(fieldTd);
+                
+                displayYears.forEach(year => {
+                    const td = document.createElement('td');
+                    td.className = 'border border-gray-300 p-1 text-center';
+                    
+                    const isInTargetPeriod = applicationConfig.targetYears.includes(year);
+                    if (isInTargetPeriod) {
+                        td.classList.add('period-valid');
+                    } else {
+                        td.classList.add('period-invalid');
+                    }
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'form-checkbox';
+                    checkbox.dataset.year = year;
+                    checkbox.dataset.field = fieldIndex;
+                    checkbox.addEventListener('change', handleTrainingCheck);
+                    
+                    // Load existing data
+                    const key = `${year}-${fieldIndex}`;
+                    if (trainingData[key]) {
+                        checkbox.checked = true;
+                    }
+                    
+                    td.appendChild(checkbox);
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Setup manual entry years
+            const manualYearSelect = document.getElementById('manualYear');
+            manualYearSelect.innerHTML = '<option value="">選択</option>';
+            for (let year = 2020; year <= 2035; year++) {
+                manualYearSelect.innerHTML += `<option value="${year}">${year}年</option>`;
+            }
+            
+            // Show/hide 2029+ special requirement
+            const specialReq = document.getElementById('specialRequirement2029');
+            if (applicationConfig.year >= 2029) {
+                specialReq.style.display = 'block';
+            } else {
+                specialReq.style.display = 'none';
+            }
+        }
+
+        function handleTrainingCheck(event) {
+            const year = parseInt(event.target.dataset.year);
+            const field = parseInt(event.target.dataset.field);
+            const key = `${year}-${field}`;
+            
+            if (event.target.checked) {
+                trainingData[key] = {
+                    year: year,
+                    field: field,
+                    fieldName: fieldNames[field]
+                };
+            } else {
+                delete trainingData[key];
+            }
+            
+            saveToLocalStorage();
+            updateProgress();
+        }
+
+        function addManualTraining() {
+            const year = parseInt(document.getElementById('manualYear').value);
+            const field = parseInt(document.getElementById('manualField').value);
+            
+            if (!year || field === '') {
+                alert('年度と研修分野を選択してください。');
+                return;
+            }
+            
+            const key = `${year}-${field}`;
+            trainingData[key] = {
+                year: year,
+                field: field,
+                fieldName: fieldNames[field]
+            };
+            
+            // Update table if the year is displayed
+            const checkbox = document.querySelector(`input[data-year="${year}"][data-field="${field}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+            
+            // Clear form
+            document.getElementById('manualYear').value = '';
+            document.getElementById('manualField').value = '';
+            
+            saveToLocalStorage();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            if (!applicationConfig.year) return;
+            
+            const fieldCounts = [0, 0, 0, 0, 0];
+            let totalValidUnits = 0;
+            const validTraining = [];
+            
+            // Count units in target period
+            Object.values(trainingData).forEach(training => {
+                if (applicationConfig.targetYears.includes(training.year)) {
+                    fieldCounts[training.field]++;
+                    totalValidUnits++;
+                    validTraining.push(training);
+                }
+            });
+            
+            // Display field progress
+            const fieldProgressDiv = document.getElementById('fieldProgress');
+            fieldProgressDiv.innerHTML = '';
+            
+            fieldNames.forEach((fieldName, index) => {
+                const count = fieldCounts[index];
+                const required = applicationConfig.requiresFieldMinimum ? 1 : 0;
+                const isAchieved = count >= required;
+                
+                const div = document.createElement('div');
+                div.className = `field-progress ${isAchieved ? 'field-achieved' : 'field-insufficient'}`;
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">${fieldName}</span>
+                        <span class="text-sm">${count}単位取得 / ${required > 0 ? required + '単位必要' : '制限なし'} ${isAchieved ? '✅' : '❌'}</span>
                     </div>
-                    <div>
-                        <div class="text-sm text-blue-700 font-medium">必要単位数</div>
-                        <div class="text-lg font-semibold">${requiredUnits}</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-blue-700 font-medium">分野別要件</div>
-                        <div class="text-sm">${fieldRequirements}</div>
+                `;
+                fieldProgressDiv.appendChild(div);
+            });
+            
+            // Check total requirements
+            const totalAchieved = totalValidUnits >= applicationConfig.requiredUnits;
+            const fieldAchieved = applicationConfig.requiresFieldMinimum ? 
+                fieldCounts.every(count => count >= 1) : true;
+            
+            // Check 2029+ special requirement
+            let specialReqAchieved = true;
+            if (applicationConfig.year >= 2029) {
+                specialReqAchieved = document.getElementById('mechanismTrainingCheck').checked;
+            }
+            
+            const canApply = totalAchieved && fieldAchieved && specialReqAchieved;
+            
+            // Display total progress
+            const totalProgressDiv = document.getElementById('totalProgress');
+            totalProgressDiv.innerHTML = `
+                <div class="flex justify-between">
+                    <span>取得単位数:</span>
+                    <span class="${totalAchieved ? 'text-green-600 font-semibold' : 'text-red-600'}">${totalValidUnits}単位 / ${applicationConfig.requiredUnits}単位</span>
+                </div>
+                ${applicationConfig.requiresFieldMinimum ? `
+                <div class="flex justify-between">
+                    <span>分野別要件:</span>
+                    <span class="${fieldAchieved ? 'text-green-600 font-semibold' : 'text-red-600'}">${fieldAchieved ? '✅ 達成' : '❌ 未達成'}</span>
+                </div>
+                ` : ''}
+                ${applicationConfig.year >= 2029 ? `
+                <div class="flex justify-between">
+                    <span>機構主催研修:</span>
+                    <span class="${specialReqAchieved ? 'text-green-600 font-semibold' : 'text-red-600'}">${specialReqAchieved ? '✅ 確認済み' : '❌ 未確認'}</span>
+                </div>
+                ` : ''}
+                <div class="pt-2 border-t border-gray-200">
+                    <div class="flex justify-between">
+                        <span class="font-semibold">申請可能性:</span>
+                        <span class="${canApply ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}">${canApply ? '✅ 申請可能' : '❌ 申請不可'}</span>
                     </div>
                 </div>
             `;
             
-            requirementsInfo.style.display = 'block';
+            // Display training history
+            displayTrainingHistory(validTraining);
         }
 
-        // 研修履歴マトリックス設定
-        function setupTrainingMatrix(applicationYear) {
-            const table = document.getElementById('trainingMatrix');
-            const thead = table.querySelector('thead tr');
-            const tbody = table.querySelector('tbody');
+        function displayTrainingHistory(trainings) {
+            const historyDiv = document.getElementById('trainingHistory');
+            historyDiv.innerHTML = '';
             
-            // 過去7年分の年度を計算
-            const years = [];
-            for (let i = 6; i >= 0; i--) {
-                years.push(applicationYear - i);
+            if (trainings.length === 0) {
+                historyDiv.innerHTML = '<p class="text-gray-500 text-sm">対象期間内の研修履歴がありません</p>';
+                return;
             }
             
-            // ヘッダー更新
-            thead.innerHTML = '<th>研修分野</th>';
-            years.forEach(year => {
-                const th = document.createElement('th');
-                th.textContent = year + '年';
-                thead.appendChild(th);
+            trainings.sort((a, b) => b.year - a.year || a.field - b.field);
+            
+            trainings.forEach(training => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-2 rounded text-sm';
+                div.innerHTML = `
+                    <div class="flex justify-between">
+                        <span>${training.year}年</span>
+                        <span class="font-medium">${training.fieldName}</span>
+                    </div>
+                `;
+                historyDiv.appendChild(div);
             });
-            
-            // 各行のチェックボックス更新
-            const fields = ['ethics', 'relations', 'safety', 'infection', 'regulations'];
-            const rows = tbody.querySelectorAll('tr');
-            
-            rows.forEach((row, index) => {
-                // 既存のチェックボックスをクリア
-                while (row.children.length > 1) {
-                    row.removeChild(row.lastChild);
-                }
-                
-                // 新しいチェックボックスを追加
-                years.forEach(year => {
-                    const td = document.createElement('td');
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.className = 'h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500';
-                    checkbox.dataset.field = fields[index];
-                    checkbox.dataset.year = year;
-                    
-                    // 対象期間の色分け
-                    const targetPeriod = getTargetPeriod(currentApplicationType, currentApplicationYear);
-                    if (year >= targetPeriod.start && year <= targetPeriod.end) {
-                        td.className = 'period-valid';
-                    } else {
-                        td.className = 'period-invalid';
-                    }
-                    
-                    checkbox.addEventListener('change', updateProgress);
-                    td.appendChild(checkbox);
-                    row.appendChild(td);
-                });
-            });
-            
-            document.getElementById('trainingHistorySection').style.display = 'block';
         }
 
-        // 対象期間取得
-        function getTargetPeriod(applicationType, applicationYear) {
-            let start, end;
-            
-            if (applicationType === 'new') {
-                if (applicationYear <= 2027) {
-                    start = 2022;
-                    end = applicationYear - 1;
-                } else {
-                    end = applicationYear - 1;
-                    start = end - 4;
-                }
-            } else if (applicationType === 'renewal') {
-                end = applicationYear - 1;
-                start = end - 4;
-            }
-            
-            return { start, end };
+        function handleSave() {
+            window.print();
         }
 
-        // 2029年度以降の特別要件設定
-        function setupSpecialRequirement(applicationYear) {
-            const specialDiv = document.getElementById('specialRequirement2029');
-            const specialCheckbox = document.getElementById('specialCheckbox2029');
-            
-            if (applicationYear >= 2029) {
-                specialDiv.style.display = 'block';
-                specialCheckbox.addEventListener('change', updateProgress);
-            } else {
-                specialDiv.style.display = 'none';
-            }
-        }
-
-        // 手動研修追加
-        document.getElementById('addManualTraining').addEventListener('click', function() {
-            const year = parseInt(document.getElementById('manualYear').value);
-            const field = document.getElementById('manualField').value;
-            
-            if (year && field) {
-                manualTrainingData.push({ year, field });
-                document.getElementById('manualYear').value = '';
-                document.getElementById('manualField').value = '';
-                updateProgress();
-            }
-        });
-
-        // 進捗更新
-        function updateProgress() {
-            if (!currentApplicationType || !currentApplicationYear) return;
-            
-            // チェックボックスデータ収集
-            const checkboxes = document.querySelectorAll('input[type="checkbox"][data-field]');
-            const trainingCounts = {
-                ethics: 0,
-                relations: 0,
-                safety: 0,
-                infection: 0,
-                regulations: 0
-            };
-            
-            const targetPeriod = getTargetPeriod(currentApplicationType, currentApplicationYear);
-            
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const year = parseInt(checkbox.dataset.year);
-                    const field = checkbox.dataset.field;
-                    
-                    if (year >= targetPeriod.start && year <= targetPeriod.end) {
-                        trainingCounts[field]++;
-                    }
-                }
-            });
-            
-            // 手動追加分を加算
-            manualTrainingData.forEach(training => {
-                if (training.year >= targetPeriod.start && training.year <= targetPeriod.end) {
-                    trainingCounts[training.field]++;
-                }
-            });
-            
-            // 進捗表示
-            displayProgress(trainingCounts);
-            
+        function showAllSections() {
+            document.getElementById('requirementsSection').style.display = 'block';
+            document.getElementById('trainingSection').style.display = 'block';
             document.getElementById('progressSection').style.display = 'block';
         }
 
-        // 進捗表示
-        function displayProgress(trainingCounts) {
-            const progressContent = document.getElementById('progressContent');
-            const eligibilityResult = document.getElementById('eligibilityResult');
-            
-            const totalUnits = Object.values(trainingCounts).reduce((sum, count) => sum + count, 0);
-            
-            let progressHTML = '<div class="space-y-3">';
-            Object.entries(trainingCounts).forEach(([field, count]) => {
-                const fieldName = fieldMapping[field];
-                let required = 0;
-                let achieved = false;
-                
-                if (currentApplicationType === 'new' && currentApplicationYear >= 2027) {
-                    required = 1;
-                    achieved = count >= 1;
-                } else {
-                    achieved = true; // 分野別制限なし
-                }
-                
-                const statusClass = achieved ? 'progress-achieved' : 'progress-incomplete';
-                const statusIcon = achieved ? '<i class="fas fa-check-circle text-green-600"></i>' : '<i class="fas fa-exclamation-circle text-red-600"></i>';
-                
-                progressHTML += `
-                    <div class="progress-item ${statusClass}">
-                        <div class="flex items-center">
-                            ${statusIcon}
-                            <span class="ml-2 font-medium">${fieldName}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-semibold">${count}単位取得</span>
-                            ${required > 0 ? ` / ${required}単位必要` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            progressHTML += '</div>';
-            
-            progressContent.innerHTML = progressHTML;
-            
-            // 申請可能性判定
-            let eligible = true;
-            let reasons = [];
-            
-            // 必要単位数チェック
-            let requiredTotal = 0;
-            if (currentApplicationType === 'new') {
-                if (currentApplicationYear === 2026) {
-                    requiredTotal = 8;
-                } else if (currentApplicationYear >= 2027) {
-                    requiredTotal = 10;
-                }
-            } else if (currentApplicationType === 'renewal') {
-                requiredTotal = 10;
-            }
-            
-            if (totalUnits < requiredTotal) {
-                eligible = false;
-                reasons.push(`総単位数不足（${totalUnits}/${requiredTotal}単位）`);
-            }
-            
-            // 分野別要件チェック（新規申請2027年以降のみ）
-            if (currentApplicationType === 'new' && currentApplicationYear >= 2027) {
-                Object.entries(trainingCounts).forEach(([field, count]) => {
-                    if (count < 1) {
-                        eligible = false;
-                        reasons.push(`${fieldMapping[field]}で単位不足`);
-                    }
-                });
-            }
-            
-            // 2029年度以降の特別要件チェック
-            if (currentApplicationYear >= 2029) {
-                const specialCheckbox = document.getElementById('specialCheckbox2029');
-                if (!specialCheckbox.checked) {
-                    eligible = false;
-                    reasons.push('機構主催研修の受講確認が必要');
-                }
-            }
-            
-            // 結果表示
-            if (eligible) {
-                eligibilityResult.className = 'mt-6 p-4 rounded-lg bg-green-50 border border-green-200';
-                eligibilityResult.innerHTML = `
-                    <div class="flex items-center text-green-800">
-                        <i class="fas fa-check-circle text-green-600 text-xl mr-3"></i>
-                        <div>
-                            <div class="font-semibold text-lg">申請可能</div>
-                            <div class="text-sm">すべての要件を満たしています</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                eligibilityResult.className = 'mt-6 p-4 rounded-lg bg-red-50 border border-red-200';
-                eligibilityResult.innerHTML = `
-                    <div class="flex items-center text-red-800">
-                        <i class="fas fa-exclamation-circle text-red-600 text-xl mr-3"></i>
-                        <div>
-                            <div class="font-semibold text-lg">申請不可</div>
-                            <div class="text-sm">不足要件: ${reasons.join('、')}</div>
-                        </div>
-                    </div>
-                `;
-            }
+        function hideAllSections() {
+            document.getElementById('requirementsSection').style.display = 'none';
+            document.getElementById('trainingSection').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'none';
         }
 
-        // PDF保存（印刷）
-        document.getElementById('saveButton').addEventListener('click', function() {
-            window.print();
-        });
+        function saveToLocalStorage() {
+            localStorage.setItem('orthodonticTrainingData', JSON.stringify(trainingData));
+            localStorage.setItem('orthodonticApplicationConfig', JSON.stringify(applicationConfig));
+        }
 
-        // UI初期化
-        function resetUI() {
-            document.getElementById('requirementsInfo').style.display = 'none';
-            document.getElementById('trainingHistorySection').style.display = 'none';
-            document.getElementById('progressSection').style.display = 'none';
-            document.getElementById('specialRequirement2029').style.display = 'none';
+        function loadFromLocalStorage() {
+            const savedTrainingData = localStorage.getItem('orthodonticTrainingData');
+            const savedApplicationConfig = localStorage.getItem('orthodonticApplicationConfig');
             
-            trainingData = {};
-            manualTrainingData = [];
-            currentApplicationType = '';
-            currentApplicationYear = '';
+            if (savedTrainingData) {
+                trainingData = JSON.parse(savedTrainingData);
+            }
+            
+            if (savedApplicationConfig) {
+                applicationConfig = JSON.parse(savedApplicationConfig);
+                
+                // Restore form values
+                document.getElementById('applicationType').value = applicationConfig.type || '';
+                handleApplicationTypeChange();
+                
+                if (applicationConfig.year) {
+                    document.getElementById('applicationYear').value = applicationConfig.year;
+                    handleApplicationYearChange();
+                }
+            }
         }
     </script>
 </body>
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDlNngbtyQRKFu5g2LZK4HN5ejoFf5DbWXJAh00LYXCN2PFT71OvQ5OrHgGGfiwNsUsCnFA9cPvLUWJfmI%2FPWf2uKltqKg6ftsWb97DeqnahdPU8MB%2FASvxPlRZ4x5%2FZLY%2FhWYUIEsvhET3kxe0TZgT%2BWFBrsznVuTe%2FI1Fc3OA83aEyIW4LFtPbE4B54pMJ%2F%2BR4Vvf2DXs3f7bv2lbc4Wfg62NnBnZgWZUD%2B4RDu1jLyi%2BYllxcEKC2%2B%2FF6mtxmVkyPDuzUHQxoRHhSSQ1tQMCwD%2FvEdczE2%2Fiq4MPmHJAnrzzsl0TbDvBip0YFdKFRf0YCXn8HnhsVnPpOHGZZeRcDA92YZ1Bkc6htXQvlk%2Fi2bt5cjsqoalU63HPXxAqsbnN2day0n5SWtQNZ7qOZc7%2BnHSYRLWEzHmRZ3SeagDTPWKK0MTsGB%2ByFS5YAXY3yqrrVL%2Fhz1BX7xL6fZp%2B%2BjFP3xpPgCd5ujbR4ZfsTfdrzPx8MeiyKg1zC1yZ%2FEzULY9Ve3dQLpHiB2wMhHygnvlE2dNWrrojkHQCFCCQdf7IUH";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDjX3Z57V0qUYPQ6oiEtkFiapPRSa%2BgPr5U84%2BJawJjnAaczQAY%2BpRB6nqEQLSbFf6m2pZ9RLCC7nw%2F5AKZef4mHNBHpJ4tmq4AAnL2pV17V%2FM55bN44HkiDtwXUvCcXxGiwExDmMzUL7Wk80c%2BGivUyN%2B%2BPFVihsoPHkKfTKqaQuTnsvK4oIWYe1mG7fbA%2FqoP40KilRgNY9Qw%2Bvysj449rMNzIMkjv7Yy6%2BVoaGHS0XPu14J9guAPEhGKbfBW1cLWJ6B4QFBcHzsjXPWix0rh18e8CGR4xpbRKVgYQkhI1MkHiJpyNOp3NR3nyzoDSvXva%2FKg1%2Ff4Bg9AIXdwhbzOO4ZDBNNbn7nMMMKFrlwlReJ5XlWfc2lkWOSNdEK8zqTi8joMQ9m2FO2l%2FUbxgDsbn12J58hgr%2F0e%2BbFbnoP%2F8MbrBdJI%2Bkhz40UbDL0bxZ0abWwhtOj2U181YjiYs8dw4KGqkDG7JHJIBJd3COjBJ5nY5qyzycxZJvs%2FYR7B7BUTKZZ30xC1BoPG3TSujjTsCy3APg7Jlv2Sqa5dhjC5B%2B";
         window.__genspark_locale = "ja-JP";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDlNngbtyQRKFu5g2LZK4HN5ejoFf5DbWXJAh00LYXCN2PFT71OvQ5OrHgGGfiwNsUsCnFA9cPvLUWJfmI/PWf2uKltqKg6ftsWb97DeqnahdPU8MB/ASvxPlRZ4x5/ZLY/hWYUIEsvhET3kxe0TZgT+WFBrsznVuTe/I1Fc3OA83aEyIW4LFtPbE4B54pMJ/+R4Vvf2DXs3f7bv2lbc4Wfg62NnBnZgWZUD+4RDu1jLyi+YllxcEKC2+/F6mtxmVkyPDuzUHQxoRHhSSQ1tQMCwD/vEdczE2/iq4MPmHJAnrzzsl0TbDvBip0YFdKFRf0YCXn8HnhsVnPpOHGZZeRcDA92YZ1Bkc6htXQvlk/i2bt5cjsqoalU63HPXxAqsbnN2day0n5SWtQNZ7qOZc7+nHSYRLWEzHmRZ3SeagDTPWKK0MTsGB+yFS5YAXY3yqrrVL/hz1BX7xL6fZp++jFP3xpPgCd5ujbR4ZfsTfdrzPx8MeiyKg1zC1yZ/EzULY9Ve3dQLpHiB2wMhHygnvlE2dNWrrojkHQCFCCQdf7IUH";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDjX3Z57V0qUYPQ6oiEtkFiapPRSa+gPr5U84+JawJjnAaczQAY+pRB6nqEQLSbFf6m2pZ9RLCC7nw/5AKZef4mHNBHpJ4tmq4AAnL2pV17V/M55bN44HkiDtwXUvCcXxGiwExDmMzUL7Wk80c+GivUyN++PFVihsoPHkKfTKqaQuTnsvK4oIWYe1mG7fbA/qoP40KilRgNY9Qw+vysj449rMNzIMkjv7Yy6+VoaGHS0XPu14J9guAPEhGKbfBW1cLWJ6B4QFBcHzsjXPWix0rh18e8CGR4xpbRKVgYQkhI1MkHiJpyNOp3NR3nyzoDSvXva/Kg1/f4Bg9AIXdwhbzOO4ZDBNNbn7nMMMKFrlwlReJ5XlWfc2lkWOSNdEK8zqTi8joMQ9m2FO2l/UbxgDsbn12J58hgr/0e+bFbnoP/8MbrBdJI+khz40UbDL0bxZ0abWwhtOj2U181YjiYs8dw4KGqkDG7JHJIBJd3COjBJ5nY5qyzycxZJvs/YR7B7BUTKZZ30xC1BoPG3TSujjTsCy3APg7Jlv2Sqa5dhjC5B+";
     </script>
     
     <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
